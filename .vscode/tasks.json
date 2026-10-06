@@ -1,0 +1,62 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "make",
+            "args": ["all"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Compila el proyecto (build/main.elf, .hex)"
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "make",
+            "args": ["clean"],
+            "problemMatcher": [],
+            "detail": "Borra la carpeta build"
+        },
+        {
+            "label": "flash",
+            "type": "shell",
+            "command": "make",
+            "args": ["flash"],
+            "dependsOn": ["build"],
+            "problemMatcher": [],
+            "detail": "Flashea el programa a la Nucleo-F446RE via OpenOCD"
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "make",
+            "args": ["test"],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Ejecuta unit tests con Ceedling + coverage"
+        },
+        {
+            "label": "lint",
+            "type": "shell",
+            "command": "make",
+            "args": ["lint"],
+            "problemMatcher": ["$gcc"],
+            "detail": "Analisis estatico con cppcheck"
+        },
+        {
+            "label": "misra",
+            "type": "shell",
+            "command": "make",
+            "args": ["misra"],
+            "problemMatcher": ["$gcc"],
+            "detail": "Verifica reglas MISRA C 2012 con cppcheck"
+        }
+    ]
+}

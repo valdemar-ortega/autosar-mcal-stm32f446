@@ -1,0 +1,21 @@
+{
+    "version": 4,
+    "configurations": [
+        {
+            "name": "STM32F446 (arm-none-eabi)",
+            "includePath": [
+                "${workspaceFolder}/app"
+            ],
+            "defines": [],
+            "compilerPath": "/opt/arm-gnu-toolchain/bin/arm-none-eabi-gcc",
+            "compilerArgs": [
+                "-mcpu=cortex-m4",
+                "-mthumb",
+                "-mfloat-abi=soft"
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-arm"
+        }
+    ]
+}

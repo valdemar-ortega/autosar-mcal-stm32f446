@@ -1,0 +1,15 @@
+# Binarios y archivos generados
+build/
+
+# Archivos temporales de editores
+*.swp
+*~
+.DS_Store
+
+# Referencia externa: copia de otro workspace, trae su propio .git
+entregas/
+
+# PDFs de estandares: se vuelven a descargar y no son mios para redistribuir.
+# De donde bajar cada uno: docs/standards/REFERENCIAS.md
+docs/standards/autosar/*.pdf
+

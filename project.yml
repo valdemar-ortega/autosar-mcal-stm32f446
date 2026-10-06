@@ -1,0 +1,31 @@
+---
+# Configuracion de Ceedling (unit testing con Unity + coverage con gcov/gcovr)
+# Ejecuta las pruebas con: make test
+:project:
+  :build_root: build/ceedling/   # Directorio donde ceedling pondra los archivos generados
+  :release_build: FALSE
+
+:paths:
+  :test:
+    - test/**    # Directorio donde estan las pruebas unitarias
+  :source:
+    - app/**     # Directorio donde estan las funciones a testear
+  :include:
+    - app/**     # Directorio donde se encuentran los archivos .h a usar
+
+:defines:
+  :test:
+    - UTEST      # Simbolo definido solo al compilar las pruebas unitarias
+
+:plugins:
+  :load_paths: []
+  :enabled:
+    - report_tests_pretty_stdout
+    - gcov
+
+:gcov:
+  :utilities:
+    - gcovr
+  :report_task: FALSE   # Los reportes se generan automaticamente con gcov:all
+  :reports:
+    - HtmlDetailed      # Reporte en build/ceedling/artifacts/gcov/
