@@ -7,11 +7,18 @@
 
 :paths:
   :test:
-    - test/**    # Directorio donde estan las pruebas unitarias
+    - test/unit/**          # Pruebas que se ejecutan en el equipo anfitrion
   :source:
-    - app/**     # Directorio donde estan las funciones a testear
+    - app/**                # Codigo de arranque provisional
+    - Bsw/Mcal/*/src/**     # Drivers del MCAL
+    - Bsw/Mcal/*/config/**  # Configuracion link-time y post-build
+    - Bsw/Services/*/src/** # Servicios del BSW
   :include:
-    - app/**     # Directorio donde se encuentran los archivos .h a usar
+    - app/**
+    - Common/Include/**     # Platform_Types, Compiler, Std_Types, MemMap
+    - Platform/Device/**    # Mapa de registros del STM32F446
+    - Bsw/Mcal/*/include/**
+    - Bsw/Services/*/include/**
 
 :defines:
   :test:

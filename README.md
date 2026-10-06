@@ -19,9 +19,9 @@ acceso a registro con un capítulo del RM0390. Nada se escribe "porque funciona"
 
 | Componente | Estado | Cómo se verificó |
 |---|---|---|
-| `Common/Include/Platform_Types.h` | Implementado | Tipos, símbolos `CPU_*` y `TRUE`/`FALSE` contra SWS_PlatformTypes R20-11. Pruebas de tamaño pendientes. |
+| `Common/Include/Platform_Types.h` | Implementado | 11 pruebas unitarias de tamaños, signo, `boolean`, `TRUE`/`FALSE` y orden de bytes, más aserciones estáticas que se evalúan en cada compilación. |
 | `Common/Include/Compiler.h` | Implementado | 16/16 macros. Las cuatro variantes de puntero comprobadas por compilación: se verifica que cada una permita o rechace mover el puntero y escribir el dato, según exige su requisito. |
-| `Platform/Device/Stm32f446xx_Registers.h` | Implementado | 57 direcciones base y 36 offsets de RCC y GPIO comparados contra `STM32F446.svd` de ST: **0 discrepancias**. |
+| `Platform/Device/Stm32f446xx_Registers.h` | Implementado | 9 pruebas unitarias de direcciones base, desplazamientos (`offsetof`) y tamaño total de las estructuras RCC y GPIO. Contrastado además contra `STM32F446.svd` de ST: 57 bases y 36 offsets, **0 discrepancias**. |
 | `Bsw/Mcal/Mcu/include/Mcu_Types.h` | Tipos definidos | Los 8 tipos que exige SWS_MCUDriver R20-11. El módulo aún no está implementado. |
 | `Common/Include/Compiler_Cfg.h`, `Std_Types.h`, `MemMap.h` | Pendientes | — |
 | Resto del árbol MCAL y drivers complejos | Carpetas preparadas, sin implementar | — |
@@ -69,9 +69,15 @@ make misra    # Reglas MISRA C:2012 (addon de cppcheck)
 Toolchain: Arm GNU Toolchain 13.3 (`arm-none-eabi-gcc`, C11), OpenOCD 0.12,
 Ceedling 1.0, cppcheck 2.19, gcovr 8.6.
 
-**Limitación conocida:** el árbol AUTOSAR (`Common/`, `Platform/`, `Bsw/`)
-todavía no está integrado al `makefile` ni a Ceedling; hoy solo se compila y
-analiza `app/`. Integrarlo es el siguiente paso del plan.
+Los cuatro objetivos cubren el árbol AUTOSAR completo: `make` compila contra
+`Common/Include`, `Platform/Device` y todos los módulos de `Bsw/`; `make test`
+ejecuta las pruebas de `test/unit/` en el equipo anfitrión; y `lint` y `misra`
+analizan `app/`, `Common/`, `Platform/` y `Bsw/`.
+
+**Hallazgos abiertos:** `make misra` reporta 7 violaciones, todas en
+`app/main.c` (reglas 11.4, 12.2 y 17.8). Son del parpadeo provisional que accede
+a registros directamente, y desaparecen cuando `Mcu`, `Port` y `Dio` sustituyan
+ese código. No se silencian mientras tanto.
 
 ---
 

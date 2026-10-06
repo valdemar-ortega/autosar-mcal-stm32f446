@@ -19,9 +19,20 @@ LINKER = linker.ld
 # directorios con los archivos fuente a compilar (.c y .s)
 SRC_PATHS  = app
 SRC_PATHS += .
+SRC_PATHS += Platform/Device
+SRC_PATHS += $(wildcard Bsw/Mcal/*/src)
+SRC_PATHS += $(wildcard Bsw/Mcal/*/config)
+SRC_PATHS += $(wildcard Bsw/Services/*/src)
+SRC_PATHS += $(wildcard Bsw/ComplexDrivers/*/src)
+SRC_PATHS += $(wildcard Bsw/ComplexDrivers/*/config)
 
 # directorios con archivos header (.h)
 INC_PATHS  = app
+INC_PATHS += Common/Include
+INC_PATHS += Platform/Device
+INC_PATHS += $(wildcard Bsw/Mcal/*/include)
+INC_PATHS += $(wildcard Bsw/Services/*/include)
+INC_PATHS += $(wildcard Bsw/ComplexDrivers/*/include)
 
 # -------------------------------------------------------------------------------------------------
 # Configuracion del toolchain y reglas de construccion
@@ -75,6 +86,9 @@ DEPS = $(OBJS:%.o=%.d)
 VPATH = $(SRC_PATHS)
 INCLS = $(addprefix -I ,$(INC_PATHS))
 
+# Arbol que revisan los analisis estaticos
+ANALYZE_PATHS = app/ Common/Include/ Platform/Device/ Bsw/
+
 #---Construir proyecto----------------------------------------------------------------------------
 all : build $(TARGET)
 
@@ -122,8 +136,10 @@ test :
 
 #---Analisis estatico con cppcheck-----------------------------------------------------------------
 lint : build
-	cppcheck $(LNFLAGS) --enable=warning,style app/
+	cppcheck $(LNFLAGS) --enable=warning,style $(INCLS) $(ANALYZE_PATHS)
 
 #---Verificacion de reglas MISRA C 2012 con el addon de cppcheck-----------------------------------
+# El addon reporta con severidad 'style': sin --enable=style el analisis no emite
+# ningun hallazgo y el target pasa siempre.
 misra : build
-	cppcheck $(LNFLAGS) --addon=misra app/
+	cppcheck $(LNFLAGS) --enable=style --addon=misra $(INCLS) $(ANALYZE_PATHS)
