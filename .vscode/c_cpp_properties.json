@@ -4,7 +4,15 @@
         {
             "name": "STM32F446 (arm-none-eabi)",
             "includePath": [
-                "${workspaceFolder}/app"
+                "${workspaceFolder}/app",
+                "${workspaceFolder}/Common/Include",
+                "${workspaceFolder}/Platform/Device",
+                "${workspaceFolder}/Bsw/Mcal/*/include",
+                "${workspaceFolder}/Bsw/Services/*/include",
+                "${workspaceFolder}/Bsw/EcuAbstraction/*/include",
+                "${workspaceFolder}/Bsw/ComplexDrivers/*/include",
+                "${workspaceFolder}/Rte/Generated",
+                "${workspaceFolder}/Config/Generated"
             ],
             "defines": [],
             "compilerPath": "/opt/arm-gnu-toolchain/bin/arm-none-eabi-gcc",
