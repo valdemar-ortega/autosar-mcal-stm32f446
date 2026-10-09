@@ -74,10 +74,22 @@ Los cuatro objetivos cubren el árbol AUTOSAR completo: `make` compila contra
 ejecuta las pruebas de `test/unit/` en el equipo anfitrión; y `lint` y `misra`
 analizan `app/`, `Common/`, `Platform/` y `Bsw/`.
 
-**Hallazgos abiertos:** `make misra` reporta 7 violaciones, todas en
-`app/main.c` (reglas 11.4, 12.2 y 17.8). Son del parpadeo provisional que accede
-a registros directamente, y desaparecen cuando `Mcu`, `Port` y `Dio` sustituyan
-ese código. No se silencian mientras tanto.
+**Hallazgos abiertos:** `make misra` reporta 112 violaciones, pendientes de
+clasificar en un registro de desviaciones:
+
+| Regla | Nº | Origen |
+|---|---|---|
+| 2.5 | 78 | Macros definidas y no usadas en las cabeceras comunes |
+| 2.3 | 18 | Tipos declarados y no usados en las cabeceras comunes |
+| 20.7 | 9 | Parámetros de macro sin paréntesis en `Compiler.h` |
+| 11.4, 12.2, 17.8 | 7 | Acceso directo a registros en `app/main.c` |
+
+Las de las reglas 2.3 y 2.5 son inherentes a una cabecera de biblioteca: los
+tipos y macros del estándar se publican completos aunque una unidad de
+traducción concreta no los use. Las de la regla 20.7 son inherentes a las
+macros de abstracción del compilador, cuyos argumentos son tipos y no pueden
+ir entre paréntesis. Las siete de `app/main.c` desaparecen cuando `Mcu`, `Port`
+y `Dio` sustituyan ese código. Ninguna se silencia mientras tanto.
 
 ---
 
