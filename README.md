@@ -74,22 +74,25 @@ Los cuatro objetivos cubren el árbol AUTOSAR completo: `make` compila contra
 ejecuta las pruebas de `test/unit/` en el equipo anfitrión; y `lint` y `misra`
 analizan `app/`, `Common/`, `Platform/` y `Bsw/`.
 
-**Hallazgos abiertos:** `make misra` reporta 112 violaciones, pendientes de
-clasificar en un registro de desviaciones:
+**Hallazgos de análisis estático:** `make misra` reporta 125 violaciones, todas
+clasificadas en [`docs/standards/DESVIACIONES_MISRA.md`](docs/standards/DESVIACIONES_MISRA.md):
+118 son desviaciones justificadas y 7 son hallazgos abiertos sobre el parpadeo
+provisional de `app/main.c`, que desaparecen cuando `Mcu`, `Port` y `Dio`
+sustituyan ese código.
 
-| Regla | Nº | Origen |
-|---|---|---|
-| 2.5 | 78 | Macros definidas y no usadas en las cabeceras comunes |
-| 2.3 | 18 | Tipos declarados y no usados en las cabeceras comunes |
-| 20.7 | 9 | Parámetros de macro sin paréntesis en `Compiler.h` |
-| 11.4, 12.2, 17.8 | 7 | Acceso directo a registros en `app/main.c` |
+Ninguna se silencia en el código: el analizador sigue mostrándolas y su número
+debe coincidir con la suma del registro.
 
-Las de las reglas 2.3 y 2.5 son inherentes a una cabecera de biblioteca: los
-tipos y macros del estándar se publican completos aunque una unidad de
-traducción concreta no los use. Las de la regla 20.7 son inherentes a las
-macros de abstracción del compilador, cuyos argumentos son tipos y no pueden
-ir entre paréntesis. Las siete de `app/main.c` desaparecen cuando `Mcu`, `Port`
-y `Dio` sustituyan ese código. Ninguna se silencia mientras tanto.
+Las desviaciones más representativas nacen de que el proyecto sigue dos
+estándares a la vez. La regla 10.4 señala la comparación `Det_Inicializado ==
+TRUE`, que AUTOSAR obliga a escribir así: `SWS_Platform_00056` define `TRUE`
+como una constante con signo, `SWS_Platform_00027` obliga a que `boolean` sea
+un entero sin signo, y `SWS_Platform_00034` exige comparar contra `TRUE`.
+Cumplir una especificación implica desviarse de la otra.
+
+Que el analizador no reporte hallazgos ajenos a este registro no constituye una
+declaración de conformidad MISRA, que exigiría además un plan de aplicación de
+directrices y un resumen de conformidad.
 
 ---
 

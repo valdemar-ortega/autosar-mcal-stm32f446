@@ -55,9 +55,30 @@
  *
  *  Capitulo 8.1.2 de la especificacion.
  *================================================================================================*/
-typedef struct Det_ConfigType  /**< Estructura que describe la configuracion del Det. */
+/**
+ * @brief   Configuracion del modulo Det.
+ *
+ * @details El contenido de esta estructura es dependiente de la implementacion:
+ *          la especificacion exige el tipo pero no fija sus miembros.
+ *
+ *          En esta realizacion no transporta nada. El capitulo 10 clasifica
+ *          todos los parametros de configuracion del modulo como de tiempo de
+ *          precompilacion, y ninguno como link time ni post-build, de modo que
+ *          todos residen en Det_Cfg.h y no queda dato alguno que deba viajar
+ *          hasta Det_Init.
+ *
+ *          La estructura existe de todas formas porque SRS_BSW_00414 exige que
+ *          toda funcion de inicializacion reciba un puntero a su configuracion
+ *          como parametro unico, de manera que todos los modulos del BSW se
+ *          inicialicen de la misma forma.
+ *
+ *          El miembro de relleno esta porque el lenguaje C no admite
+ *          estructuras sin miembros. Cuando algun parametro del modulo pase a
+ *          ser configurable despues de compilar, ocupara su lugar.
+ */
+typedef struct
 {
-
+    uint8 Reserved;  /**< Relleno sin uso. Ver la nota de esta estructura. */
 } Det_ConfigType;
 
 
@@ -66,9 +87,11 @@ typedef struct Det_ConfigType  /**< Estructura que describe la configuracion del
  *
  *  Valor que cada API pasa como ApiId al notificar un error. Capitulo 8.1.3.
  *================================================================================================*/
-
-
-
+ 
+#define DET_INIT_SERVICE_ID                        0x00u
+#define DET_REPORT_ERROR_SERVICE_ID                0x01u
+#define DET_START_SERVICE_ID                       0x02u
+#define DET_GET_VERSION_INFO_SERVICE_ID            0x03u
 /*==================================================================================================
  *  Prototipos de funcion
  *
@@ -102,15 +125,7 @@ FUNC(Std_ReturnType, DET_CODE) Det_ReportError(uint16 ModuleId,
                                                uint8  ApiId,
                                                uint8  ErrorId);
 
-FUNC(Std_ReturnType, DET_CODE) Det_ReportRuntimeError(uint16 ModuleId,
-                                                      uint8  InstanceId,
-                                                      uint8  ApiId,
-                                                      uint8  ErrorId);
 
-FUNC(Std_ReturnType, DET_CODE) Det_ReportTransientFault(uint16 ModuleId,
-                                                        uint8  InstanceId,
-                                                        uint8  ApiId,
-                                                        uint8  FaultId);
 
 FUNC(void, DET_CODE) Det_GetVersionInfo(P2VAR(Std_VersionInfoType, AUTOMATIC, DET_APPL_DATA) versioninfo);
 
